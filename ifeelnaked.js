@@ -46,6 +46,11 @@
             return;
         }
 
+        // Wait for May 15th.
+        if (new Date() < new Date(2015, 4, 15)) {
+            return;
+        }
+
         // Get geolocation.
         var script = document.createElement('script');
         script.setAttribute('async', 'async');
