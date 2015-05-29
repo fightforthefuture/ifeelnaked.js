@@ -22,6 +22,7 @@
         '216.81.80.0/20',
 
         // Area 51
+        /*
         '6.0.0.0/8',
         '7.0.0.0/8',
         '11.0.0.0/8',
@@ -34,6 +35,7 @@
         '49.0.0.0/8',
         '50.0.0.0/8',
         '55.0.0.0/8'
+        */
     ];
 
     function main() {
@@ -46,20 +48,18 @@
             return;
         }
 
-        // Wait for May 15th.
-        if (new Date() < new Date(2015, 4, 15)) {
-            return;
-        }
-
         // Get geolocation.
         var script = document.createElement('script');
         script.setAttribute('async', 'async');
         script.setAttribute('src', 'https://fftf-geocoder.herokuapp.com/?callback=redirect_js_callback');
-        document.head.appendChild(script);
+        document.getElementsByTagName('head')[0].appendChild(script);
+
+        // send leaderboard stat
+        sendLeaderboardStat();
     }
 
     function redirect() {
-        location.replace('https://www.ifeelnaked.org/');
+        location.replace('https://www.blackoutcongress.org/');
     }
 
     window.redirect_js_callback = function(geolocation) {
@@ -109,6 +109,31 @@
         }
 
         return maskedip;
+    }
+
+    function sendLeaderboardStat() {
+        var data = {
+            campaign: 'blackoutcongress',
+            stat: 'display_widget',
+            data: null,
+            host: window.location.host.replace('www.', ''),
+            session: null
+        };
+
+        // Serialize data
+        var params = '';
+        for (var key in data) {
+            if (params.length !== 0) {
+                params += '&';
+            }
+            params += key + '=' + data[key];
+        }
+
+        var http = new XMLHttpRequest();
+        var url = 'https://fftf-host-counter.herokuapp.com/log';
+        http.open('POST', url, true);
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        http.send(params);
     }
 
     // Let's begin.
